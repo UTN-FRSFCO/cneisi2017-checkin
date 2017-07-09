@@ -28,4 +28,5 @@
         android:layout_alignStart="@+id/tvAuditoriumName"
         android:layout_below="@+id/tvAuditoriumName"
         android:layout_marginTop="13dp" />
+
 </RelativeLayout>
