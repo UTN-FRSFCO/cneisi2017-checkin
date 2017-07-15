@@ -3,26 +3,31 @@ package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
-import com.google.zxing.integration.android.IntentIntegrator;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
-import org.w3c.dom.Text;
+
+import org.json.JSONObject;
 
 import java.util.List;
+
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data.AssistanceDbHelper;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Assistance;
 
 public class ScannerActivity extends AppCompatActivity {
 
@@ -33,6 +38,10 @@ public class ScannerActivity extends AppCompatActivity {
     private TextView tvAssistants;
 
     private int assistants;
+
+    private int conferenceId;
+
+    private AssistanceDbHelper assistanceDbHelper;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -50,8 +59,18 @@ public class ScannerActivity extends AppCompatActivity {
             ImageView imageView = (ImageView) findViewById(R.id.barcodePreview);
             imageView.setImageBitmap(result.getBitmapWithResultPoints(Color.YELLOW));
 
-            assistants++;
-            tvAssistants.setText(Integer.toString(assistants) + " Asistentes");
+            try {
+                JSONObject assistantJson = new JSONObject(result.getText());
+
+                Assistance assistence = new Assistance(assistantJson, conferenceId);
+
+                new AddAssistanceTask().execute(assistence);
+
+                assistants++;
+                tvAssistants.setText(Integer.toString(assistants) + " Asistentes");
+            } catch (Throwable t) {
+                Log.e("ERROR", "Could not parse malformed JSON: \"" + result.getText() + "\"");
+            }
         }
 
         @Override
@@ -64,6 +83,8 @@ public class ScannerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
 
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         barcodeView = (DecoratedBarcodeView) findViewById(R.id.barcode_scanner);
         barcodeView.decodeContinuous(callback);
 
@@ -75,8 +96,11 @@ public class ScannerActivity extends AppCompatActivity {
         String conferenceName = bundle.getString("ConferenceName");
 
         this.setTitle(conferenceName);
+        this.conferenceId = bundle.getInt("ConferenceId");
 
         assistants = 0;
+
+        assistanceDbHelper = new AssistanceDbHelper(this);
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(ScannerActivity.this,
@@ -160,5 +184,18 @@ public class ScannerActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return barcodeView.onKeyDown(keyCode, event) || super.onKeyDown(keyCode, event);
+    }
+
+    private class AddAssistanceTask extends AsyncTask<Assistance, Void, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Assistance... assistances) {
+                return assistanceDbHelper.saveAssistance(assistances[0]) > 0;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            Log.i("INFO", "Assistance saved");
+        }
     }
 }
