@@ -23,16 +23,11 @@
         <TextView
             android:id="@+id/tvAssistants"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="43dp"
             android:text="Asistentes"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/btnSincronize"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:onClick="resume"
-            android:text="Sincronizar" />
     </LinearLayout>
 
     <View

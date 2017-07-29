@@ -1,8 +1,20 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data;
 
+import android.content.ContentResolver;
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 public class AssistanceContract {
+    public static final String AUTHORITY = "ar.edu.ar.sanfrancisco.cneisi.checkin_cneisi2017.provider";
+    public static final Uri BASE_URI = Uri.parse("content://" + AUTHORITY);
+    public static final Uri Assistance_URI = Uri.withAppendedPath(AssistanceContract.BASE_URI, "/assistance");
+
+    public static final String URI_TYPE_ASSISTANCE_DIR = ContentResolver.CURSOR_DIR_BASE_TYPE +
+            "vnd.ar.edu.ar.sanfrancisco.cneisi.checkin_cneisi2017.provider.assistantes";
+
+    public static final String URI_TYPE_STUDENT_ITEM = ContentResolver.CURSOR_ITEM_BASE_TYPE +
+            "vnd.ar.edu.ar.sanfrancisco.cneisi.checkin_cneisi2017.provider.students";
+
     public static abstract class AssistanceEntry implements BaseColumns {
         public static final String TABLE_NAME ="assistences";
 

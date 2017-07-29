@@ -31,7 +31,8 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS " + AssistanceEntry.TABLE_NAME);
+        onCreate(db);
     }
 
     public long saveAssistance(Assistance assistance) {

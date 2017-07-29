@@ -8,17 +8,17 @@
         android:id="@+id/tvAuditoriumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="19dp"
-        android:layout_marginStart="19dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="12dp"
         android:text="Auditorio"
         android:textAllCaps="true"
         android:textColor="@color/colorPrimary"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ListView
         android:id="@+id/lvConferences"
@@ -27,6 +27,8 @@
         android:layout_alignLeft="@+id/tvAuditoriumName"
         android:layout_alignStart="@+id/tvAuditoriumName"
         android:layout_below="@+id/tvAuditoriumName"
+        android:divider="@color/colorPrimary"
+        android:dividerHeight="1dp"
         android:layout_marginTop="13dp" />
 
 </RelativeLayout>
