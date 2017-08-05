@@ -1,4 +1,4 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models;
 
 import android.content.ContentValues;
 
@@ -8,10 +8,7 @@ import org.json.JSONObject;
 import java.util.Date;
 import java.util.UUID;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data.AssistanceContract;
-
-import static android.R.attr.phoneNumber;
-import static ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data.AssistanceContract.*;
+import static ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceContract.*;
 
 public class Assistance {
     private String id;

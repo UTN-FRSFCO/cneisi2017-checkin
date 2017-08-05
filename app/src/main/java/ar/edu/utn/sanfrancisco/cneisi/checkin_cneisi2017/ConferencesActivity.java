@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +17,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Conference;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Conference;
 
 public class ConferencesActivity extends AppCompatActivity {
     TextView tvAuditoriumName;

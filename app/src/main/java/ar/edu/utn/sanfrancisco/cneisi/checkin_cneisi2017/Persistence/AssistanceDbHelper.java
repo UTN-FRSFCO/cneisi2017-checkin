@@ -1,12 +1,12 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data.AssistanceContract.AssistanceEntry;
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Assistance;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceContract.AssistanceEntry;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
 
 public class AssistanceDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;

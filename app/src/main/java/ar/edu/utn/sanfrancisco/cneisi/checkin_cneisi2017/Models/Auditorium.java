@@ -1,4 +1,4 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models;
 
 import java.util.List;
 

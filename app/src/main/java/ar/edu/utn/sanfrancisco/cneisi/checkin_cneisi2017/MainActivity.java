@@ -2,7 +2,6 @@ package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioTimestamp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,11 +13,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Auditorium;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Auditorium;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lvAuditoriums;

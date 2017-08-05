@@ -26,8 +26,8 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data.AssistanceDbHelper;
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Assistance;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceDbHelper;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
 
 public class ScannerActivity extends AppCompatActivity {
 

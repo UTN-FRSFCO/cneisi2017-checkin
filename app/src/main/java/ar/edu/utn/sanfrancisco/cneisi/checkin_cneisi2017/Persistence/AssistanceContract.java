@@ -1,4 +1,4 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence;
 
 import android.content.ContentResolver;
 import android.net.Uri;
