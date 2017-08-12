@@ -28,6 +28,7 @@ import java.util.List;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceDbHelper;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services.ApiService;
 
 public class ScannerActivity extends AppCompatActivity {
 
@@ -101,6 +102,12 @@ public class ScannerActivity extends AppCompatActivity {
         assistants = 0;
 
         assistanceDbHelper = new AssistanceDbHelper(this);
+
+
+        Assistance assistance = new Assistance();
+
+        ApiService apiService = new ApiService();
+        apiService.postAssistance(assistance);
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(ScannerActivity.this,
@@ -190,7 +197,10 @@ public class ScannerActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Assistance... assistances) {
-                return assistanceDbHelper.saveAssistance(assistances[0]) > 0;
+            ApiService apiService = new ApiService();
+            apiService.postAssistance(assistances[0]);
+
+            return assistanceDbHelper.saveAssistance(assistances[0]) > 0;
         }
 
         @Override
