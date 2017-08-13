@@ -12,25 +12,23 @@ import static ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.Assi
 
 public class Assistance {
     private String id;
-    private String name;
     private String dni;
-    private String docket;
     private Date date;
     private int conferenceId;
+    private String catcherName;
     private boolean sent;
 
     public Assistance() {
 
     }
 
-    public Assistance(JSONObject assistantJson, int conferenceId) {
+    public Assistance(JSONObject assistantJson, int conferenceId, String catcherName) {
         try {
             this.id = UUID.randomUUID().toString();
-            this.name = assistantJson.getString("nombre");
             this.dni = assistantJson.getString("dni");
-            this.docket = assistantJson.getString("legajo");
             this.date = new Date();
             this.conferenceId = conferenceId;
+            this.catcherName = catcherName;
             this.sent = false;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -41,28 +39,12 @@ public class Assistance {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDni() {
         return dni;
     }
 
     public void setDni(String dni) {
         this.dni = dni;
-    }
-
-    public String getDocket() {
-        return docket;
-    }
-
-    public void setDocket(String docket) {
-        this.docket = docket;
     }
 
     public Date getDate() {
@@ -89,14 +71,20 @@ public class Assistance {
         this.sent = sent;
     }
 
+    public String getCatcherName() {
+        return catcherName;
+    }
+
+    public void setCatcherName(String catcherName) {
+        this.catcherName = catcherName;
+    }
+
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues();
-        values.put(AssistanceEntry.ID, id);
-        values.put(AssistanceEntry.NAME, name);
         values.put(AssistanceEntry.DNI, dni);
-        values.put(AssistanceEntry.DOCKET, docket);
         values.put(AssistanceEntry.DATE, date.toString());
         values.put(AssistanceEntry.CONFERENCEID, conferenceId);
+        values.put(AssistanceEntry.CATCHER_NAME, catcherName);
         values.put(AssistanceEntry.SENT, sent);
         return values;
     }

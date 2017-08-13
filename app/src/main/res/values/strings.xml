@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Check-in CNEISI2017</string>
+    <string name="title_activity_login">Ingresar</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Usuario</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Ingresar</string>
+    <string name="action_sign_in_short">CNEISI2017</string>
+    <string name="error_invalid_email">Usuario no valido</string>
+    <string name="error_invalid_password">Password incorrecta</string>
+    <string name="error_incorrect_password">Password incorrecta</string>
+    <string name="error_field_required">Campo requerido</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
 </resources>

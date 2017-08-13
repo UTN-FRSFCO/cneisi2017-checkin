@@ -21,11 +21,10 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("CREATE TABLE " + AssistanceEntry.TABLE_NAME + " ("
                 + AssistanceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + AssistanceEntry.ID + " TEXT NOT NULL,"
-                + AssistanceEntry.NAME + " TEXT NOT NULL,"
                 + AssistanceEntry.DNI + " TEXT NOT NULL,"
-                + AssistanceEntry.DOCKET + " TEXT NOT NULL,"
                 + AssistanceEntry.DATE + " TEXT NOT NULL,"
                 + AssistanceEntry.CONFERENCEID + " INTEGER NOT NULL,"
+                + AssistanceEntry.CATCHER_NAME + " TEXT NOT NULL,"
                 + AssistanceEntry.SENT + " BOOLEAN NOT NULL,"
                 + "UNIQUE (" + AssistanceEntry.ID + "))");
     }
@@ -43,6 +42,17 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
                 AssistanceEntry.TABLE_NAME,
                 null,
                 assistance.toContentValues());
+    }
+
+    public long updateAssistance(Assistance assistance) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+
+        return sqLiteDatabase.update(
+                AssistanceEntry.TABLE_NAME,
+                assistance.toContentValues(),
+                "id=" + assistance.getId(),
+                null
+        );
     }
 
     public Cursor getAllAssistances() {

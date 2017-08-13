@@ -19,11 +19,10 @@ public class AssistanceContract {
         public static final String TABLE_NAME ="assistences";
 
         public static final String ID = "id";
-        public static final String NAME = "name";
         public static final String DNI = "dni";
-        public static final String DOCKET = "docket";
         public static final String DATE = "date";
         public static final String CONFERENCEID = "conference_id";
+        public static final String CATCHER_NAME = "catcher_name";
         public static final String SENT = "sent";
     }
 }

@@ -1,6 +1,7 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -64,7 +65,10 @@ public class ScannerActivity extends AppCompatActivity {
             try {
                 JSONObject assistantJson = new JSONObject(result.getText());
 
-                Assistance assistence = new Assistance(assistantJson, conferenceId);
+                SharedPreferences catcherDetails = getSharedPreferences("catcher", MODE_PRIVATE);
+                String catcherName = catcherDetails.getString("catcher_name", "");
+
+                Assistance assistence = new Assistance(assistantJson, conferenceId, catcherName);
 
                 new AddAssistanceTask().execute(assistence);
 
@@ -98,7 +102,7 @@ public class ScannerActivity extends AppCompatActivity {
         String conferenceName = bundle.getString("ConferenceName");
 
         this.setTitle(conferenceName);
-        this.conferenceId = bundle.getInt("ConferenceId");
+        this.conferenceId = bundle.getInt("ConferenceID");
 
         assistants = 0;
 
@@ -201,10 +205,8 @@ public class ScannerActivity extends AppCompatActivity {
 
                 if (sent) {
                     assistance.setSent(true);
-                    assistanceDbHelper.saveAssistance(assistance);
+                    assistanceDbHelper.updateAssistance(assistance);
                 }
-
-                return apiService.postAssistance(assistance);
             }
 
             return apiService.postAssistance(assistance);

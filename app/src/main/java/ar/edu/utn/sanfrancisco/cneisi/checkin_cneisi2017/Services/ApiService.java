@@ -1,6 +1,7 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services;
 
 import android.os.StrictMode;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import java.io.OutputStream;
@@ -32,7 +33,9 @@ public class ApiService {
             urlConnection.setDoOutput(true);
 
             String params = "conference_id="  + assistance.getConferenceId() +
-                    "&date=" + assistance.getDate() + "&dni=" + assistance.getDni() + "&catcher_name=emi";
+                    "&date=" + DateFormat.format("dd/MM/yyyy", assistance.getDate()).toString() +
+                    "&dni=" + assistance.getDni() +
+                    "&catcher_name=" + assistance.getCatcherName();
 
             urlConnection.setDoOutput(true);
             OutputStream os = urlConnection.getOutputStream();
