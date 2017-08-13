@@ -17,6 +17,7 @@ public class Assistance {
     private String docket;
     private Date date;
     private int conferenceId;
+    private boolean sent;
 
     public Assistance() {
 
@@ -30,6 +31,7 @@ public class Assistance {
             this.docket = assistantJson.getString("legajo");
             this.date = new Date();
             this.conferenceId = conferenceId;
+            this.sent = false;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -79,6 +81,14 @@ public class Assistance {
         this.conferenceId = conferenceId;
     }
 
+    public boolean isSent() {
+        return sent;
+    }
+
+    public void setSent(boolean sent) {
+        this.sent = sent;
+    }
+
     public ContentValues toContentValues() {
         ContentValues values = new ContentValues();
         values.put(AssistanceEntry.ID, id);
@@ -87,6 +97,7 @@ public class Assistance {
         values.put(AssistanceEntry.DOCKET, docket);
         values.put(AssistanceEntry.DATE, date.toString());
         values.put(AssistanceEntry.CONFERENCEID, conferenceId);
+        values.put(AssistanceEntry.SENT, sent);
         return values;
     }
 }

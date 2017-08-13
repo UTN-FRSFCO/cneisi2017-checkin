@@ -43,6 +43,7 @@ public class ScannerActivity extends AppCompatActivity {
     private int conferenceId;
 
     private AssistanceDbHelper assistanceDbHelper;
+    private ApiService apiService;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -102,12 +103,7 @@ public class ScannerActivity extends AppCompatActivity {
         assistants = 0;
 
         assistanceDbHelper = new AssistanceDbHelper(this);
-
-
-        Assistance assistance = new Assistance();
-
-        ApiService apiService = new ApiService();
-        apiService.postAssistance(assistance);
+        apiService = new ApiService();
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(ScannerActivity.this,
@@ -197,10 +193,21 @@ public class ScannerActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Assistance... assistances) {
-            ApiService apiService = new ApiService();
-            apiService.postAssistance(assistances[0]);
+            Assistance assistance = assistances[0];
 
-            return assistanceDbHelper.saveAssistance(assistances[0]) > 0;
+            boolean saved = assistanceDbHelper.saveAssistance(assistance) > 0;
+            if (saved) {
+                boolean sent = apiService.postAssistance(assistance);
+
+                if (sent) {
+                    assistance.setSent(true);
+                    assistanceDbHelper.saveAssistance(assistance);
+                }
+
+                return apiService.postAssistance(assistance);
+            }
+
+            return apiService.postAssistance(assistance);
         }
 
         @Override

@@ -24,5 +24,6 @@ public class AssistanceContract {
         public static final String DOCKET = "docket";
         public static final String DATE = "date";
         public static final String CONFERENCEID = "conference_id";
+        public static final String SENT = "sent";
     }
 }

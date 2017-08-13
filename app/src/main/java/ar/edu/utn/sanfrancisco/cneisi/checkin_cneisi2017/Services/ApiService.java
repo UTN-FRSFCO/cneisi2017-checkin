@@ -3,6 +3,7 @@ package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services;
 import android.os.StrictMode;
 import android.util.Log;
 
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -10,7 +11,7 @@ import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
 
 public class ApiService {
 
-    private String API_URL = "http://127.0.0.1:8000/:8000/api";
+    private String API_URL = "http://82f46fec.ngrok.io/api";
 
     public boolean postAssistance(Assistance assistance) {
         try {
@@ -20,19 +21,28 @@ public class ApiService {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                         .permitAll().build();
                 StrictMode.setThreadPolicy(policy);
-                //your codes here
-
             }
 
-            String urlPath = API_URL + "/assistance";
+            String urlPath = API_URL + "/assistance?api_token=123456";
             URL url = new URL(urlPath);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("conference_id", "1");
-            urlConnection.setRequestProperty("date", "11/11/2017");
-            urlConnection.setRequestProperty("dni", "98989898");
-            urlConnection.setRequestProperty("catcher_name", "Joseee");
+            urlConnection.setRequestProperty("Accept", "application/json");
+
+            urlConnection.setDoOutput(true);
+
+            String params = "conference_id="  + assistance.getConferenceId() +
+                    "&date=" + assistance.getDate() + "&dni=" + assistance.getDni() + "&catcher_name=emi";
+
+            urlConnection.setDoOutput(true);
+            OutputStream os = urlConnection.getOutputStream();
+            os.write(params.getBytes());
+            os.flush();
+            os.close();
+
             urlConnection.connect();
+
+            Log.i(urlConnection.getResponseMessage(), "Failed");
 
             try {
                 if(urlConnection.getResponseCode() == 200) {
@@ -44,7 +54,7 @@ public class ApiService {
 
             return false;
         } catch (Exception e) {
-            Log.e("ERROR", e.getMessage(), e);
+            Log.e("ERROR AL ENVIAR", e.getMessage(), e);
             return false;
         }
     }

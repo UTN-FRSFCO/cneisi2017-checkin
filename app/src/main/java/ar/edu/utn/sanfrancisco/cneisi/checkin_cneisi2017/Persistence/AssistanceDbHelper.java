@@ -26,6 +26,7 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
                 + AssistanceEntry.DOCKET + " TEXT NOT NULL,"
                 + AssistanceEntry.DATE + " TEXT NOT NULL,"
                 + AssistanceEntry.CONFERENCEID + " INTEGER NOT NULL,"
+                + AssistanceEntry.SENT + " BOOLEAN NOT NULL,"
                 + "UNIQUE (" + AssistanceEntry.ID + "))");
     }
 
