@@ -33,7 +33,7 @@ public class ApiService {
             urlConnection.setDoOutput(true);
 
             String params = "conference_id="  + assistance.getConferenceId() +
-                    "&date=" + DateFormat.format("dd/MM/yyyy", assistance.getDate()).toString() +
+                    "&date=" + assistance.getDate() +
                     "&dni=" + assistance.getDni() +
                     "&catcher_name=" + assistance.getCatcherName();
 
@@ -44,8 +44,6 @@ public class ApiService {
             os.close();
 
             urlConnection.connect();
-
-            Log.i(urlConnection.getResponseMessage(), "Failed");
 
             try {
                 if(urlConnection.getResponseCode() == 200) {

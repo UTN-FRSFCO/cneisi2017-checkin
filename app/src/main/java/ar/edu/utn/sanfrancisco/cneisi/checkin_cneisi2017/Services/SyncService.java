@@ -4,7 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.SyncAdapter.SyncAdapter;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Network.SyncAdapter;
 
 public class SyncService extends Service {
     private static final Object sSyncAdapterLock = new Object();

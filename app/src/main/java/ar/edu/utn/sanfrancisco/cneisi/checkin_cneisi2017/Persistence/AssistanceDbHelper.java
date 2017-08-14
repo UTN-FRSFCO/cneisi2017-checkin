@@ -20,13 +20,12 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + AssistanceEntry.TABLE_NAME + " ("
                 + AssistanceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + AssistanceEntry.ID + " TEXT NOT NULL,"
                 + AssistanceEntry.DNI + " TEXT NOT NULL,"
                 + AssistanceEntry.DATE + " TEXT NOT NULL,"
                 + AssistanceEntry.CONFERENCEID + " INTEGER NOT NULL,"
                 + AssistanceEntry.CATCHER_NAME + " TEXT NOT NULL,"
                 + AssistanceEntry.SENT + " BOOLEAN NOT NULL,"
-                + "UNIQUE (" + AssistanceEntry.ID + "))");
+                + "UNIQUE (" + AssistanceEntry._ID + "))");
     }
 
     @Override
@@ -50,8 +49,8 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
         return sqLiteDatabase.update(
                 AssistanceEntry.TABLE_NAME,
                 assistance.toContentValues(),
-                "id=" + assistance.getId(),
-                null
+                AssistanceEntry._ID + " LIKE ?",
+                new String[]{assistance.getId()}
         );
     }
 
@@ -67,11 +66,23 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
                         null);
     }
 
+    public Cursor getUnsyncAssistances() {
+        return getReadableDatabase()
+                .query(
+                        AssistanceEntry.TABLE_NAME,
+                        null,
+                        AssistanceEntry.SENT + "= ?",
+                        new String[]{"0"},
+                        null,
+                        null,
+                        null);
+    }
+
     public Cursor getAssistanceById(String assistanceId) {
         Cursor c = getReadableDatabase().query(
                 AssistanceEntry.TABLE_NAME,
                 null,
-                AssistanceEntry.ID + " LIKE ?",
+                AssistanceEntry._ID + " LIKE ?",
                 new String[]{assistanceId},
                 null,
                 null,

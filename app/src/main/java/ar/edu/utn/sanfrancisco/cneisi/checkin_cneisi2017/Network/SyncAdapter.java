@@ -1,4 +1,4 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.SyncAdapter;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Network;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

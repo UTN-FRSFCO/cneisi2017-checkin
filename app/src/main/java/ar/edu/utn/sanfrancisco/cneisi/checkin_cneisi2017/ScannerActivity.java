@@ -197,19 +197,33 @@ public class ScannerActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Assistance... assistances) {
-            Assistance assistance = assistances[0];
+            try {
+                Assistance assistance = assistances[0];
 
-            boolean saved = assistanceDbHelper.saveAssistance(assistance) > 0;
-            if (saved) {
-                boolean sent = apiService.postAssistance(assistance);
+                boolean saved = assistanceDbHelper.saveAssistance(assistance) > 0;
+                if (saved) {
+                    int tries = 0;
+                    boolean sent = false;
 
-                if (sent) {
-                    assistance.setSent(true);
-                    assistanceDbHelper.updateAssistance(assistance);
+                    while(tries < 3 && !sent) {
+                        sent = apiService.postAssistance(assistance);
+                        tries++;
+                    }
+
+                    if (sent) {
+                        assistance.setSent(true);
+                        assistanceDbHelper.updateAssistance(assistance);
+                    }
+
+                    return sent;
                 }
-            }
 
-            return apiService.postAssistance(assistance);
+                return false;
+            } catch (Exception e)
+            {
+                Log.e("ERROR GUARDANDO", e.getMessage());
+                return false;
+            }
         }
 
         @Override

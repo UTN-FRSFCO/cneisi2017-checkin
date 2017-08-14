@@ -1,6 +1,8 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.text.format.DateFormat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,7 +15,7 @@ import static ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.Assi
 public class Assistance {
     private String id;
     private String dni;
-    private Date date;
+    private String date;
     private int conferenceId;
     private String catcherName;
     private boolean sent;
@@ -22,11 +24,27 @@ public class Assistance {
 
     }
 
+    public Assistance(Cursor cursor) {
+        int idIndex = cursor.getColumnIndexOrThrow("_id");
+        int dniIndex = cursor.getColumnIndexOrThrow("dni");
+        int conferenceIdIndex = cursor.getColumnIndexOrThrow("conference_id");
+        int dateIndex = cursor.getColumnIndexOrThrow("date");
+        int catcherIndex = cursor.getColumnIndexOrThrow("catcher_name");
+        int sentIndex = cursor.getColumnIndexOrThrow("sent");
+
+        this.id = cursor.getString(idIndex);
+        this.dni = cursor.getString(dniIndex);
+        this.date = cursor.getString(dateIndex);
+        this.conferenceId = cursor.getInt(conferenceIdIndex);
+        this.catcherName = cursor.getString(catcherIndex);
+        this.sent = (cursor.getInt(sentIndex) == 1);
+    }
+
     public Assistance(JSONObject assistantJson, int conferenceId, String catcherName) {
         try {
             this.id = UUID.randomUUID().toString();
             this.dni = assistantJson.getString("dni");
-            this.date = new Date();
+            this.date = DateFormat.format("dd/MM/yyyy", new Date()).toString();
             this.conferenceId = conferenceId;
             this.catcherName = catcherName;
             this.sent = false;
@@ -47,11 +65,11 @@ public class Assistance {
         this.dni = dni;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
