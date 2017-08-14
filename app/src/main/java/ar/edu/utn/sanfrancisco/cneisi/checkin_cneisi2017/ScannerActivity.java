@@ -200,8 +200,10 @@ public class ScannerActivity extends AppCompatActivity {
             try {
                 Assistance assistance = assistances[0];
 
-                boolean saved = assistanceDbHelper.saveAssistance(assistance) > 0;
-                if (saved) {
+                long assistanceId = assistanceDbHelper.saveAssistance(assistance);
+                if (assistanceId > 0) {
+                    assistance.setId((int) assistanceId);
+
                     int tries = 0;
                     boolean sent = false;
 
@@ -212,7 +214,9 @@ public class ScannerActivity extends AppCompatActivity {
 
                     if (sent) {
                         assistance.setSent(true);
-                        assistanceDbHelper.updateAssistance(assistance);
+                        long updated = assistanceDbHelper.updateAssistance(assistance);
+
+                        Log.i("actualizado", Long.toString(updated));
                     }
 
                     return sent;

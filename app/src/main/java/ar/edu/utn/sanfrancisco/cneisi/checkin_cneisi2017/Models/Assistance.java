@@ -13,7 +13,7 @@ import java.util.UUID;
 import static ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceContract.*;
 
 public class Assistance {
-    private String id;
+    private int id;
     private String dni;
     private String date;
     private int conferenceId;
@@ -32,7 +32,7 @@ public class Assistance {
         int catcherIndex = cursor.getColumnIndexOrThrow("catcher_name");
         int sentIndex = cursor.getColumnIndexOrThrow("sent");
 
-        this.id = cursor.getString(idIndex);
+        this.id = cursor.getInt(idIndex);
         this.dni = cursor.getString(dniIndex);
         this.date = cursor.getString(dateIndex);
         this.conferenceId = cursor.getInt(conferenceIdIndex);
@@ -42,9 +42,8 @@ public class Assistance {
 
     public Assistance(JSONObject assistantJson, int conferenceId, String catcherName) {
         try {
-            this.id = UUID.randomUUID().toString();
             this.dni = assistantJson.getString("dni");
-            this.date = DateFormat.format("dd/MM/yyyy", new Date()).toString();
+            this.date = DateFormat.format("dd/MM/yyyy HH:mm:ss", new Date()).toString();
             this.conferenceId = conferenceId;
             this.catcherName = catcherName;
             this.sent = false;
@@ -53,8 +52,13 @@ public class Assistance {
         }
     }
 
-    public String getId() {
+    public int getId() {
         return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
     }
 
     public String getDni() {

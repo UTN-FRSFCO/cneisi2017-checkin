@@ -50,7 +50,7 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
                 AssistanceEntry.TABLE_NAME,
                 assistance.toContentValues(),
                 AssistanceEntry._ID + " LIKE ?",
-                new String[]{assistance.getId()}
+                new String[]{Integer.toString(assistance.getId())}
         );
     }
 

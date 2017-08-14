@@ -33,16 +33,12 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                     if (sent) {
                         assistance.setSent(true);
                         assistanceDbHelper.updateAssistance(assistance);
-
-                        Log.i("Asistencia enviada", assistance.getId());
                     }
                 }
             } catch (Exception e)
             {
                 Log.e("ERROR", e.getMessage());
             }
-
-            Toast.makeText(context, "Network Available Do operations",Toast.LENGTH_LONG).show();
         }
     }
 
