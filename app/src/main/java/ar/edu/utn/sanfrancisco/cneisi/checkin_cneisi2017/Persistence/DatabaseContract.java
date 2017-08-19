@@ -15,7 +15,8 @@ public final class DatabaseContract {
         public static final String TITLE = "title";
         public static final String DESCRIPTION = "description";
         public static final String DATE = "date";
-        public static final String AUDITORIUM_ID = "auditorium_id";
+        public static final String DURATION = "duration";
+        public static final String AUDITORIUM = "auditorium";
         public static final String ID_CLOUD = "id_cloud";
 
         public static final String TEXT_TYPE = " TEXT";
@@ -24,13 +25,14 @@ public final class DatabaseContract {
 
         public static final String SQL_CREATE_CONFERENCES_TABLE =
                 "CREATE TABLE " + ConferenceEntry.TABLE_NAME + " (" +
-                        ConferenceEntry.ID + " INTEGER PRIMARY KEY," +
+                        ConferenceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                         ConferenceEntry.TITLE + TEXT_TYPE + COMMA_SEP +
                         ConferenceEntry.DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                         ConferenceEntry.DATE + TEXT_TYPE + COMMA_SEP +
-                        ConferenceEntry.AUDITORIUM_ID + INTEGER_TYPE +
-                        ConferenceEntry.ID_CLOUD + INTEGER_TYPE +
-                        " )";
+                        ConferenceEntry.DURATION + INTEGER_TYPE + COMMA_SEP +
+                        ConferenceEntry.AUDITORIUM + TEXT_TYPE + COMMA_SEP +
+                        ConferenceEntry.ID_CLOUD + INTEGER_TYPE + COMMA_SEP +
+                        "UNIQUE (" + ConferenceEntry._ID + "))";
 
         public static final String SQL_DELETE_CONFERENCES =
                 "DROP TABLE IF EXISTS " + ConferenceEntry.TABLE_NAME;

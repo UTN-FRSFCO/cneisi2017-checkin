@@ -11,22 +11,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Conference;
 
 public class ConferencesActivity extends AppCompatActivity {
     TextView tvAuditoriumName;
     ListView lvConferences;
+    Spinner spinnerDays;
+
+    private String[] arraySpinner;
 
     ProgressDialog dialog;
-
-    private IntentIntegrator qrScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +39,27 @@ public class ConferencesActivity extends AppCompatActivity {
 
         tvAuditoriumName = (TextView) findViewById(R.id.tvAuditoriumName);
         lvConferences = (ListView) findViewById(R.id.lvConferences);
-        qrScan = new IntentIntegrator(this);
+        spinnerDays = (Spinner) findViewById(R.id.spinnerDay);
 
         Bundle bundle = getIntent().getExtras();
         String auditoriumName = bundle.getString("auditorium");
 
-        tvAuditoriumName.setText(auditoriumName);
+        this.setTitle(auditoriumName);
+
+        this.arraySpinner = new String[] {
+                "Jueves", "Viernes"
+        };
+
+        ArrayAdapter<String> adapterDays = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arraySpinner);
+        adapterDays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDays.setAdapter(adapterDays);
+
+        if (isSecondDay()) {
+            spinnerDays.setSelection(1);
+        } else {
+            spinnerDays.setSelection(0);
+        }
 
         dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
@@ -116,5 +135,25 @@ public class ConferencesActivity extends AppCompatActivity {
         conferences.add(conference3);
 
         return conferences;
+    }
+
+    private boolean isSecondDay() {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.YEAR, 2017);
+        calendar.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date secondDay = calendar.getTime();
+
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        String secondDayAsString = dateFormat.format(secondDay);
+
+        calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+
+        String todayAsString = dateFormat.format(today);
+
+        return secondDayAsString.equals(todayAsString);
     }
 }

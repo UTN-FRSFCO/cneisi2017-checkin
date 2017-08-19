@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Auditorium;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services.ApiService;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lvAuditoriums;
@@ -49,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ApiService apiService = new ApiService();
+        apiService.getConferences(this);
     }
 
     public class AuditoriumAdapter extends ArrayAdapter<Auditorium> {
