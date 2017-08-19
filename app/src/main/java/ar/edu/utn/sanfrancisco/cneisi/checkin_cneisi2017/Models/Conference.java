@@ -1,6 +1,7 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,28 @@ public class Conference {
     private int duration;
     private String  auditorium;
     private int idCloud;
+
+    public Conference() {
+
+    }
+
+    public Conference(Cursor cursor) {
+        int idIndex = cursor.getColumnIndexOrThrow("_id");
+        int titleIndex = cursor.getColumnIndexOrThrow("title");
+        int descriptionIndex = cursor.getColumnIndexOrThrow("description");
+        int dateIndex = cursor.getColumnIndexOrThrow("date");
+        int durationIndex = cursor.getColumnIndexOrThrow("duration");
+        int autitoriumIndex = cursor.getColumnIndexOrThrow("auditorium");
+        int idCloudIndex = cursor.getColumnIndexOrThrow("id_cloud");
+
+        this.id = cursor.getInt(idIndex);
+        this.title = cursor.getString(titleIndex);
+        this.description = cursor.getString(descriptionIndex);
+        this.date = cursor.getString(dateIndex);
+        this.duration = cursor.getInt(durationIndex);
+        this.auditorium = cursor.getString(autitoriumIndex);
+        this.idCloud = cursor.getInt(idCloudIndex);
+    }
 
     public int getId() {
         return id;

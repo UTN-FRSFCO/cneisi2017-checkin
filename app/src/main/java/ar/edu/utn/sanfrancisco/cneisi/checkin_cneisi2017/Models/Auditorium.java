@@ -5,6 +5,7 @@ import java.util.List;
 public class Auditorium {
     private int id;
     private String name;
+    private String code;
 
     private List<Conference> conferences;
 
@@ -30,5 +31,13 @@ public class Auditorium {
 
     public void setConferences(List<Conference> conferences) {
         this.conferences = conferences;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

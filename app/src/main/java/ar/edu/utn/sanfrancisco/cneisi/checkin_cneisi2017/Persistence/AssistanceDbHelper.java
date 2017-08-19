@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.IntegerRes;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceContract.AssistanceEntry;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
@@ -12,12 +13,23 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "cneisi.db";
 
+    private static AssistanceDbHelper sInstance;
+
     public AssistanceDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    public static synchronized AssistanceDbHelper getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new AssistanceDbHelper(context.getApplicationContext());
+        }
+
+        return sInstance;
+    }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL(DatabaseContract.ConferenceEntry.SQL_CREATE_CONFERENCES_TABLE);
         sqLiteDatabase.execSQL("CREATE TABLE " + AssistanceEntry.TABLE_NAME + " ("
                 + AssistanceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + AssistanceEntry.DNI + " TEXT NOT NULL,"
@@ -30,6 +42,7 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(DatabaseContract.ConferenceEntry.SQL_DELETE_CONFERENCES);
         db.execSQL("DROP TABLE IF EXISTS " + AssistanceEntry.TABLE_NAME);
         onCreate(db);
     }
@@ -73,6 +86,18 @@ public class AssistanceDbHelper extends SQLiteOpenHelper {
                         null,
                         AssistanceEntry.SENT + "= ?",
                         new String[]{"0"},
+                        null,
+                        null,
+                        null);
+    }
+
+    public Cursor getByConferenceIdCloud(int idCloud) {
+        return getReadableDatabase()
+                .query(
+                        AssistanceEntry.TABLE_NAME,
+                        null,
+                        AssistanceEntry.CONFERENCEID + "= ?",
+                        new String[]{Integer.toString(idCloud)},
                         null,
                         null,
                         null);

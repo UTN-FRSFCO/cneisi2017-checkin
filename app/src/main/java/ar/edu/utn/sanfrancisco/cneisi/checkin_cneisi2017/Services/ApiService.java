@@ -130,7 +130,7 @@ public class ApiService {
         }
 
         public void saveConferences(ArrayList<Conference> conferences) {
-            ConferenceDbHelper conferenceDbHelper = new ConferenceDbHelper(this.context);
+            ConferenceDbHelper conferenceDbHelper = ConferenceDbHelper.getInstance(this.context);
 
             if (conferenceDbHelper.getAllConferences().getCount() == 0) {
                 for (Conference conference: conferences) {

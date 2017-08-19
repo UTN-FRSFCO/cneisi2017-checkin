@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 try
                 {
                     intent.putExtra("auditorium", auditorium.getName());
+                    intent.putExtra("auditoriumCode", auditorium.getCode());
 
                     startActivity(intent);
                 }catch (Exception e)
@@ -79,14 +80,17 @@ public class MainActivity extends AppCompatActivity {
         Auditorium assemblyHall = new Auditorium();
         assemblyHall.setId(1);
         assemblyHall.setName("Salón de actos");
+        assemblyHall.setCode("auditorium_1");
 
         Auditorium fourthLevelA = new Auditorium();
         fourthLevelA.setId(2);
         fourthLevelA.setName("Cuarto nivel A");
+        fourthLevelA.setCode("auditorium_2");
 
         Auditorium fourthLevelB = new Auditorium();
         fourthLevelB.setId(3);
         fourthLevelB.setName("Cuarto nivel B");
+        fourthLevelB.setCode("auditorium_3");
 
         ArrayList<Auditorium> auditoriums = new ArrayList<Auditorium>();
         auditoriums.add(assemblyHall);

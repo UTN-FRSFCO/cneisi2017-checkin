@@ -16,7 +16,7 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, final Intent intent) {
         if(checkInternet(context))
         {
-            AssistanceDbHelper assistanceDbHelper = new AssistanceDbHelper(context);
+            AssistanceDbHelper assistanceDbHelper = AssistanceDbHelper.getInstance(context);
             ApiService apiService = new ApiService();
 
 

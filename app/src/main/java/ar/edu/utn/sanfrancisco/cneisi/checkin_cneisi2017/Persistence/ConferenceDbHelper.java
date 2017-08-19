@@ -28,11 +28,20 @@ public class ConferenceDbHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DatabaseContract.ConferenceEntry.SQL_CREATE_CONFERENCES_TABLE);
+        db.execSQL("CREATE TABLE " + AssistanceContract.AssistanceEntry.TABLE_NAME + " ("
+                + AssistanceContract.AssistanceEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + AssistanceContract.AssistanceEntry.DNI + " TEXT NOT NULL,"
+                + AssistanceContract.AssistanceEntry.DATE + " TEXT NOT NULL,"
+                + AssistanceContract.AssistanceEntry.CONFERENCEID + " INTEGER NOT NULL,"
+                + AssistanceContract.AssistanceEntry.CATCHER_NAME + " TEXT NOT NULL,"
+                + AssistanceContract.AssistanceEntry.SENT + " BOOLEAN NOT NULL,"
+                + "UNIQUE (" + AssistanceContract.AssistanceEntry._ID + "))");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DatabaseContract.ConferenceEntry.SQL_DELETE_CONFERENCES);
+        db.execSQL("DROP TABLE IF EXISTS " + AssistanceContract.AssistanceEntry.TABLE_NAME);
         onCreate(db);
     }
 

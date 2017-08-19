@@ -29,6 +29,7 @@ import java.util.List;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceDbHelper;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceDbHelper;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services.ApiService;
 
 public class ScannerActivity extends AppCompatActivity {
@@ -104,9 +105,16 @@ public class ScannerActivity extends AppCompatActivity {
         this.setTitle(conferenceName);
         this.conferenceId = bundle.getInt("ConferenceID");
 
-        assistants = 0;
+        this.assistanceDbHelper = AssistanceDbHelper.getInstance(this);
+        try {
+            assistants = assistanceDbHelper.getByConferenceIdCloud(conferenceId).getCount();
+        } catch (Exception e)
+        {
+            assistants = 0;
+            Log.e("ERORR", e.getMessage());
+        }
 
-        assistanceDbHelper = new AssistanceDbHelper(this);
+        assistanceDbHelper = AssistanceDbHelper.getInstance(this);
         apiService = new ApiService();
 
         // Here, thisActivity is the current activity
