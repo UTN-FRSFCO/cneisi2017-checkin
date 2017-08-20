@@ -2,7 +2,6 @@ package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioTimestamp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,11 +13,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Auditorium;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Auditorium;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services.ApiService;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lvAuditoriums;
@@ -44,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 try
                 {
                     intent.putExtra("auditorium", auditorium.getName());
+                    intent.putExtra("auditoriumCode", auditorium.getCode());
 
                     startActivity(intent);
                 }catch (Exception e)
@@ -52,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        ApiService apiService = new ApiService();
+        apiService.getConferences(this);
     }
 
     public class AuditoriumAdapter extends ArrayAdapter<Auditorium> {
@@ -78,14 +80,17 @@ public class MainActivity extends AppCompatActivity {
         Auditorium assemblyHall = new Auditorium();
         assemblyHall.setId(1);
         assemblyHall.setName("Salón de actos");
+        assemblyHall.setCode("auditorium_1");
 
         Auditorium fourthLevelA = new Auditorium();
         fourthLevelA.setId(2);
         fourthLevelA.setName("Cuarto nivel A");
+        fourthLevelA.setCode("auditorium_2");
 
         Auditorium fourthLevelB = new Auditorium();
         fourthLevelB.setId(3);
         fourthLevelB.setName("Cuarto nivel B");
+        fourthLevelB.setCode("auditorium_3");
 
         ArrayList<Auditorium> auditoriums = new ArrayList<Auditorium>();
         auditoriums.add(assemblyHall);

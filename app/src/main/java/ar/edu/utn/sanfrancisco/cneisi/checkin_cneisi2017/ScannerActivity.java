@@ -1,6 +1,7 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -26,8 +27,10 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.data.AssistanceDbHelper;
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Assistance;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceDbHelper;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceDbHelper;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services.ApiService;
 
 public class ScannerActivity extends AppCompatActivity {
 
@@ -42,6 +45,7 @@ public class ScannerActivity extends AppCompatActivity {
     private int conferenceId;
 
     private AssistanceDbHelper assistanceDbHelper;
+    private ApiService apiService;
 
     private BarcodeCallback callback = new BarcodeCallback() {
         @Override
@@ -62,7 +66,10 @@ public class ScannerActivity extends AppCompatActivity {
             try {
                 JSONObject assistantJson = new JSONObject(result.getText());
 
-                Assistance assistence = new Assistance(assistantJson, conferenceId);
+                SharedPreferences catcherDetails = getSharedPreferences("catcher", MODE_PRIVATE);
+                String catcherName = catcherDetails.getString("catcher_name", "");
+
+                Assistance assistence = new Assistance(assistantJson, conferenceId, catcherName);
 
                 new AddAssistanceTask().execute(assistence);
 
@@ -96,11 +103,19 @@ public class ScannerActivity extends AppCompatActivity {
         String conferenceName = bundle.getString("ConferenceName");
 
         this.setTitle(conferenceName);
-        this.conferenceId = bundle.getInt("ConferenceId");
+        this.conferenceId = bundle.getInt("ConferenceID");
 
-        assistants = 0;
+        this.assistanceDbHelper = AssistanceDbHelper.getInstance(this);
+        try {
+            assistants = assistanceDbHelper.getByConferenceIdCloud(conferenceId).getCount();
+        } catch (Exception e)
+        {
+            assistants = 0;
+            Log.e("ERORR", e.getMessage());
+        }
 
-        assistanceDbHelper = new AssistanceDbHelper(this);
+        assistanceDbHelper = AssistanceDbHelper.getInstance(this);
+        apiService = new ApiService();
 
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(ScannerActivity.this,
@@ -190,7 +205,37 @@ public class ScannerActivity extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(Assistance... assistances) {
-                return assistanceDbHelper.saveAssistance(assistances[0]) > 0;
+            try {
+                Assistance assistance = assistances[0];
+
+                long assistanceId = assistanceDbHelper.saveAssistance(assistance);
+                if (assistanceId > 0) {
+                    assistance.setId((int) assistanceId);
+
+                    int tries = 0;
+                    boolean sent = false;
+
+                    while(tries < 3 && !sent) {
+                        sent = apiService.postAssistance(assistance);
+                        tries++;
+                    }
+
+                    if (sent) {
+                        assistance.setSent(true);
+                        long updated = assistanceDbHelper.updateAssistance(assistance);
+
+                        Log.i("actualizado", Long.toString(updated));
+                    }
+
+                    return sent;
+                }
+
+                return false;
+            } catch (Exception e)
+            {
+                Log.e("ERROR GUARDANDO", e.getMessage());
+                return false;
+            }
         }
 
         @Override

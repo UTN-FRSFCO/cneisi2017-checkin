@@ -3,6 +3,7 @@ package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,23 +13,27 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.models.Conference;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Conference;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceDbHelper;
 
-public class ConferencesActivity extends AppCompatActivity {
+public class ConferencesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tvAuditoriumName;
     ListView lvConferences;
+    Spinner spinnerDays;
+
+    private String[] arraySpinner;
 
     ProgressDialog dialog;
-
-    private IntentIntegrator qrScan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +42,40 @@ public class ConferencesActivity extends AppCompatActivity {
 
         tvAuditoriumName = (TextView) findViewById(R.id.tvAuditoriumName);
         lvConferences = (ListView) findViewById(R.id.lvConferences);
-        qrScan = new IntentIntegrator(this);
+        spinnerDays = (Spinner) findViewById(R.id.spinnerDay);
 
         Bundle bundle = getIntent().getExtras();
         String auditoriumName = bundle.getString("auditorium");
+        String auditoriumCode = bundle.getString("auditoriumCode");
 
-        tvAuditoriumName.setText(auditoriumName);
+        this.setTitle(auditoriumName);
+
+        this.arraySpinner = new String[] {
+                "Jueves", "Viernes"
+        };
+
+        ArrayAdapter<String> adapterDays = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, arraySpinner);
+        adapterDays.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDays.setAdapter(adapterDays);
+        spinnerDays.setOnItemSelectedListener(this);
+
+        if (isSecondDay()) {
+            spinnerDays.setSelection(1);
+        } else {
+            spinnerDays.setSelection(0);
+        }
 
         dialog = new ProgressDialog(this);
         dialog.setIndeterminate(true);
         dialog.setCancelable(false);
         dialog.setMessage("Cargando conferencias...");
 
-        final ArrayList<Conference> conferences = this.getConferences();
+        this.loadConferences(auditoriumCode);
+    }
 
+    private void loadConferences(String auditoriumCode) {
+        final ArrayList<Conference> conferences = this.getConferences(auditoriumCode);
         ConferenceAdapter adapter = new ConferenceAdapter(ConferencesActivity.this, conferences);
         lvConferences.setAdapter(adapter);
 
@@ -62,7 +87,7 @@ public class ConferencesActivity extends AppCompatActivity {
 
                 try
                 {
-                    intent.putExtra("ConferenceID", conference.getId());
+                    intent.putExtra("ConferenceID", conference.getExternalId());
                     intent.putExtra("ConferenceName", conference.getTitle());
 
                     startActivity(intent);
@@ -96,27 +121,81 @@ public class ConferencesActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<Conference> getConferences() {
-        Conference conference1 = new Conference();
-        conference1.setId(1);
-        conference1.setTitle("IBM - Watson");
-        conference1.setDate("30/08/2017 16:00");
+    public void onItemSelected(AdapterView<?> parent, View view,
+                               int pos, long id) {
+        Bundle bundle = getIntent().getExtras();
+        String auditoriumCode = bundle.getString("auditoriumCode");
 
-        Conference conference2 = new Conference();
-        conference2.setId(2);
-        conference2.setTitle("Asegurarte.com - Bla bla");
-        conference2.setDate("30/08/2017 18:00");
+        this.loadConferences(auditoriumCode);
+    }
 
-        Conference conference3 = new Conference();
-        conference3.setId(3);
-        conference3.setTitle("Sergio Guzman - Chatbot");
-        conference3.setDate("30/08/2017 19:00");
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
+    private ArrayList<Conference> getConferences(String auditoriumCode) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2017);
+        calendar.set(Calendar.MONTH, Calendar.AUGUST);
+        calendar.set(Calendar.DAY_OF_MONTH, 31);
+        Date firstDay = calendar.getTime();
+
+        calendar.getInstance();
+        calendar.set(Calendar.YEAR, 2017);
+        calendar.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date secondDay = calendar.getTime();
+
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String firstDayAsString = dateFormat.format(firstDay);
+        String secondDayAsString = dateFormat.format(secondDay);
+
+        ConferenceDbHelper conferenceDbHelper = ConferenceDbHelper.getInstance(this);
 
         ArrayList<Conference> conferences = new ArrayList<Conference>();
-        conferences.add(conference1);
-        conferences.add(conference2);
-        conferences.add(conference3);
+
+        try {
+            Cursor cursor = conferenceDbHelper.getByAuditorium(auditoriumCode);
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                Conference conference = new Conference(cursor);
+                cursor.moveToNext();
+
+                DateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date conferenceDate = simpleDateFormat.parse(conference.getDate());
+                String conferenceDayAsString = dateFormat.format(conferenceDate);
+
+                if(spinnerDays.getSelectedItemPosition() == 0 && conferenceDayAsString.equals(firstDayAsString) ||
+                        spinnerDays.getSelectedItemPosition() == 1 && conferenceDayAsString.equals(secondDayAsString)) {
+                    conferences.add(conference);
+                }
+            }
+        } catch (Exception e)
+        {
+            Log.e("ERROR", e.getMessage());
+        }
 
         return conferences;
+    }
+
+    private boolean isSecondDay() {
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.set(Calendar.YEAR, 2017);
+        calendar.set(Calendar.MONTH, Calendar.SEPTEMBER);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        Date secondDay = calendar.getTime();
+
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+        String secondDayAsString = dateFormat.format(secondDay);
+
+        calendar = Calendar.getInstance();
+        Date today = calendar.getTime();
+
+        String todayAsString = dateFormat.format(today);
+
+        return secondDayAsString.equals(todayAsString);
     }
 }
