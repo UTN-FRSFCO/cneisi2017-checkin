@@ -1,5 +1,6 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -98,5 +99,11 @@ public class MainActivity extends AppCompatActivity {
         auditoriums.add(fourthLevelB);
 
         return auditoriums;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        System.exit(0);
     }
 }

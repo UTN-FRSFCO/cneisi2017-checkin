@@ -133,9 +133,6 @@ public class ScannerActivity extends AppCompatActivity implements BarcodeTracker
     public void onDetectedQrCode(Barcode barcode) {
         String result = barcode.displayValue;
 
-        Log.i("RESULT", result);
-        Log.i("LAST TEXT", lastText);
-
         if (barcode != null && !result.equals(lastText)) {
             lastText = barcode.displayValue;
 

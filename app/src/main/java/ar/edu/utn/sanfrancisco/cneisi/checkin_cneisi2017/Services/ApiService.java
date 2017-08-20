@@ -23,7 +23,7 @@ import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceD
 
 public class ApiService {
 
-    private String API_URL = "http://48ac3e65.ngrok.io/api";
+    private String API_URL = "http://b42174bd.ngrok.io/api";
 
     public boolean postAssistance(Assistance assistance) {
         try {
@@ -57,6 +57,7 @@ public class ApiService {
 
             try {
                 if (urlConnection.getResponseCode() == 200) {
+                    Log.i("ASISTENCIA ENVIADA", "Se envio correctamente una asistencia");
                     return true;
                 }
             } finally {
