@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.DatabaseContract;
 
@@ -17,7 +19,7 @@ public class Conference {
     private String description;
     private String date;
     private int duration;
-    private String  auditorium;
+    private String auditorium;
     private int idCloud;
 
     public Conference() {
@@ -102,7 +104,7 @@ public class Conference {
         JSONObject conferenceJson;
         ArrayList<Conference> conferences = new ArrayList<Conference>(json.length());
 
-        for (int i=0; i < json.length(); i++) {
+        for (int i = 0; i < json.length(); i++) {
             try {
                 conferenceJson = json.getJSONObject(i);
             } catch (Exception e) {
@@ -146,5 +148,17 @@ public class Conference {
         values.put(DatabaseContract.ConferenceEntry.AUDITORIUM, auditorium);
         values.put(DatabaseContract.ConferenceEntry.ID_CLOUD, idCloud);
         return values;
+    }
+
+    public String getHour() {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(this.getDate());
+
+            String formattedDate = new SimpleDateFormat("HH:mm").format(date);
+
+            return formattedDate;
+        } catch (Exception e) {
+            return this.getDate();
+        }
     }
 }

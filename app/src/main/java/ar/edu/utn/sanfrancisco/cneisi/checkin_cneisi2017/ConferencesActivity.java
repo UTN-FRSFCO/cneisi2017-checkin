@@ -97,10 +97,10 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
 
                     new AlertDialog.Builder(getActivity())
                             .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle("CONFIRMAR")
-                            .setMessage("Quiere escanear credenciales de la charla " + conference.getTitle() + " cuya fecha es " +
-                                    "" + conference.getDate() + " ?")
-                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            .setTitle(conference.getTitle())
+                            .setMessage("Quiere escanear credenciales de la charla " + conference.getTitle() + " en el horario " +
+                                    "" + conference.getHour() + " ?")
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     intent.putExtra("ConferenceID", conference.getExternalId());
@@ -135,7 +135,7 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
             TextView tvDate = (TextView) convertView.findViewById(R.id.tvConferenceDate);
 
             tvName.setText(conference.getTitle());
-            tvDate.setText(conference.getDate());
+            tvDate.setText(conference.getHour());
 
             return convertView;
         }
