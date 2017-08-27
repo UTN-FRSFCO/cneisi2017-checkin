@@ -1,6 +1,7 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.text.format.DateFormat;
@@ -136,6 +137,25 @@ public class ApiService {
             if (conferenceDbHelper.getAllConferences().getCount() == 0) {
                 for (Conference conference: conferences) {
                     conferenceDbHelper.saveConference(conference);
+                }
+            } else {
+                Log.i("ACTUALIZANDO", "actualizando conferencias");
+
+                for (Conference conference: conferences) {
+                    Cursor conferenceCursor = conferenceDbHelper.getByIdCloud(conference.getExternalId());
+
+                    if(conferenceCursor.getCount() == 0) {
+                        conferenceDbHelper.saveConference(conference);
+                    } else {
+                        conferenceCursor.moveToFirst();
+                        Conference conferenceSearched = new Conference(conferenceCursor);
+                        conferenceSearched.setDate(conference.getDate());
+                        conferenceSearched.setAuditorium(conference.getAuditorium());
+
+                        conferenceDbHelper.updateConference(conferenceSearched);
+                    }
+
+                    conferenceCursor.close();
                 }
             }
         }

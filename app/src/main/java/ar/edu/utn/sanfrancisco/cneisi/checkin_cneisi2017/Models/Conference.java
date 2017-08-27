@@ -2,6 +2,7 @@ package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,7 @@ public class Conference {
         int durationIndex = cursor.getColumnIndexOrThrow("duration");
         int autitoriumIndex = cursor.getColumnIndexOrThrow("auditorium");
         int idCloudIndex = cursor.getColumnIndexOrThrow("id_cloud");
+
 
         this.id = cursor.getInt(idIndex);
         this.title = cursor.getString(titleIndex);

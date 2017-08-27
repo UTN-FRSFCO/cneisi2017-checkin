@@ -69,6 +69,8 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
                         assistanceDbHelper.updateAssistance(assistance);
                     }
                 }
+
+                cursor.close();
             } catch (Exception e)
             {
                 Log.e("ERROR SYNC", e.getMessage());

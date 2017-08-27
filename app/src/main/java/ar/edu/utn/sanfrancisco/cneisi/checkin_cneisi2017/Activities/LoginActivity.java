@@ -1,4 +1,4 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,6 +35,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.R;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -52,7 +54,28 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * TODO: remove after connecting to a real authentication system.
      */
     private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "emirodriguez:secret", "otro:otro"
+            "emirodriguez:secret",
+            "marcosaghemo:cobra",
+            "mauribuffa:mach",
+            "matibeltramone:crazy",
+            "lautilubatti:laravel",
+            "charly:carles",
+            "matirosso:nice",
+            "andrebiasco:caracoles",
+            "martinsanchez:soyunlujo",
+            "nicoferrero:pela",
+            "carlos:secret",
+            "fededegiovanni:crack",
+            "auxiliar1:pokemon",
+            "auxiliar2:cocodrilo",
+            "auxiliar3:comandante",
+            "auxiliar4:frutilla",
+            "auxiliar5:soja",
+            "auxiliar6:carancho",
+            "auxiliar7:canasta",
+            "auxiliar8:papafrita",
+            "auxiliar9:pera",
+            "auxiliar10:dracarys"
     };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.

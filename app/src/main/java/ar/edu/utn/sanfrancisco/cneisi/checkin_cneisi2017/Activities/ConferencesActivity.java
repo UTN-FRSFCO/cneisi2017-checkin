@@ -1,7 +1,6 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Activities;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -29,6 +27,7 @@ import java.util.Date;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Conference;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceDbHelper;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.R;
 
 public class ConferencesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tvAuditoriumName;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.IntegerRes;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Conference;
 
@@ -89,15 +90,15 @@ public class ConferenceDbHelper extends SQLiteOpenHelper{
                         null);
     }
 
-//    public Cursor getAssistanceById(String assistanceId) {
-//        Cursor c = getReadableDatabase().query(
-//                AssistanceEntry.TABLE_NAME,
-//                null,
-//                AssistanceEntry._ID + " LIKE ?",
-//                new String[]{assistanceId},
-//                null,
-//                null,
-//                null);
-//        return c;
-//    }
+    public Cursor getByIdCloud(int idCloud) {
+        return getReadableDatabase()
+                .query(
+                        DatabaseContract.ConferenceEntry.TABLE_NAME,
+                        null,
+                        DatabaseContract.ConferenceEntry.ID_CLOUD + "= ?",
+                        new String[]{Integer.toString(idCloud)},
+                        null,
+                        null,
+                        null);
+    }
 }

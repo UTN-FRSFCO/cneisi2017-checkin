@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Scanner;
 
 import android.Manifest;
 import android.content.Context;

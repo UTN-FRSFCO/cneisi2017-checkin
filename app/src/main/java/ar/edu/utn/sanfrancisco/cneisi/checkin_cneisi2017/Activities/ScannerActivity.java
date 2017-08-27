@@ -1,4 +1,4 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -10,50 +10,42 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.hardware.Camera;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
-import com.google.android.gms.vision.text.Text;
-import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.BeepManager;
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
 
 
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.List;
 
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Scanner.BarcodeTrackerFactory;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Scanner.CameraSource;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Scanner.CameraSourcePreview;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Scanner.BarcodeTracker;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.AssistanceDbHelper;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Assistance;
-import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceDbHelper;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.R;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services.ApiService;
 
-public class ScannerActivity extends AppCompatActivity implements BarcodeTracker.BarcodeGraphicTrackerCallback  {
+public class ScannerActivity extends AppCompatActivity implements BarcodeTracker.BarcodeGraphicTrackerCallback {
 
     private static final String TAG = "Barcode-reader";
 
@@ -90,6 +82,8 @@ public class ScannerActivity extends AppCompatActivity implements BarcodeTracker
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
 
         beepManager = new BeepManager(this);
+        beepManager.setBeepEnabled(true);
+        beepManager.setVibrateEnabled(true);
 
         tvAssistants = (TextView) findViewById(R.id.tvAssistants);
         lastText = "";
@@ -111,7 +105,7 @@ public class ScannerActivity extends AppCompatActivity implements BarcodeTracker
             Log.e("ERORR", e.getMessage());
         }
 
-        tvAssistants.setText(Integer.toString(assistants) + " Asistentes");
+        tvAssistants.setText(Integer.toString(assistants) + " ASISTENTES ESCANEADOS");
 
         assistanceDbHelper = AssistanceDbHelper.getInstance(this);
         apiService = new ApiService();
@@ -151,7 +145,7 @@ public class ScannerActivity extends AppCompatActivity implements BarcodeTracker
                 new AddAssistanceTask().execute(assistence);
 
                 assistants++;
-                setText(tvAssistants, Integer.toString(assistants) + " Asistentes");
+                setText(tvAssistants, Integer.toString(assistants) + " ASISTENTES ESCANEADOS");
             } catch (Throwable t) {
                 Log.e("ERROR", "Could not parse malformed JSON: \"" + result + "\"" + t.getMessage());
             }
