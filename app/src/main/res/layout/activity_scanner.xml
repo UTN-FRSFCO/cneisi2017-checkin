@@ -28,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Asistentes"
+            android:textColor="#00899f"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -45,6 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonsLayout"
         android:layout_centerHorizontal="true"
-        android:text="TextView" />
+        android:text="TextView"
+        android:textColor="#ff8400" />
 
 </RelativeLayout>

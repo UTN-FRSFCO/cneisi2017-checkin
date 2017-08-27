@@ -23,7 +23,7 @@ import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceD
 
 public class ApiService {
 
-    private String API_URL = "http://b42174bd.ngrok.io/api";
+    private String API_URL = "http://4294e968.ngrok.io/api";
 
     public boolean postAssistance(Assistance assistance) {
         try {

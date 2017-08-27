@@ -99,7 +99,7 @@ public class ScannerActivity extends AppCompatActivity implements BarcodeTracker
         Bundle bundle = getIntent().getExtras();
         String conferenceName = bundle.getString("ConferenceName");
 
-        this.setTitle(conferenceName);
+        this.setTitle(conferenceName.toUpperCase());
         this.conferenceId = bundle.getInt("ConferenceID");
 
         this.assistanceDbHelper = AssistanceDbHelper.getInstance(this);

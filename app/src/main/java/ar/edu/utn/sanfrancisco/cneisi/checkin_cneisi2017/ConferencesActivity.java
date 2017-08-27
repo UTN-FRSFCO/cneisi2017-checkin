@@ -52,7 +52,7 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
         String auditoriumName = bundle.getString("auditorium");
         String auditoriumCode = bundle.getString("auditoriumCode");
 
-        this.setTitle(auditoriumName);
+        this.setTitle(auditoriumName.toUpperCase());
 
         this.arraySpinner = new String[]{
                 "Jueves", "Viernes"

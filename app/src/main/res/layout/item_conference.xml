@@ -7,16 +7,18 @@
         android:id="@+id/tvConferenceName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-smallcaps"
         android:text="Name"
-        android:textAllCaps="true"
-        android:textColor="@color/colorAccent"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textAllCaps="false"
+        android:textColor="#00899f"
+        android:textSize="30sp" />
 
     <TextView
         android:id="@+id/tvConferenceDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-smallcaps"
         android:text="StartDate"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="#ff8400"
+        android:textSize="18sp" />
 </LinearLayout>

@@ -10,10 +10,11 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_weight="0.05"
+        android:fontFamily="sans-serif-smallcaps"
         android:gravity="center"
         android:text="name"
         android:textAlignment="textStart"
-        android:textColor="@color/colorAccent"
+        android:textColor="#00899f"
         android:textSize="30sp" />
 
 </LinearLayout>
