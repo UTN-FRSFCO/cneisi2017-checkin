@@ -24,7 +24,8 @@ import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceD
 
 public class ApiService {
 
-    private String API_URL = "http://4294e968.ngrok.io/api";
+    private String API_URL = "http://cneisi.sanfrancisco.utn.edu.ar/api";
+    private String API_TOKEN = "fe7f3a34c7c04f7da5c4eaceb75f0575";
 
     public boolean postAssistance(Assistance assistance) {
         try {
@@ -35,7 +36,7 @@ public class ApiService {
                 StrictMode.setThreadPolicy(policy);
             }
 
-            String urlPath = API_URL + "/assistance?api_token=123456";
+            String urlPath = API_URL + "/assistance?api_token=" + API_TOKEN;
             URL url = new URL(urlPath);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
@@ -88,7 +89,7 @@ public class ApiService {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlPath = API_URL + "/conferences?api_token=123456";
+                String urlPath = API_URL + "/conferences?api_token=" + API_TOKEN;
                 URL url = new URL(urlPath);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");

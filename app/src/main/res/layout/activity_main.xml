@@ -35,9 +35,9 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
         app:srcCompat="@drawable/isologotipo"
-        android:layout_below="@+id/lvAuditoriums"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="26dp" />
 
 </RelativeLayout>
