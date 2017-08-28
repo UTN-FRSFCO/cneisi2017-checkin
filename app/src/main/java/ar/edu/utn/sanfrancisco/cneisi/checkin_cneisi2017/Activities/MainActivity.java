@@ -1,4 +1,4 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Activities;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,13 +13,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Auditorium;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.R;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services.ApiService;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lvAuditoriums;
+    private ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ApiService apiService = new ApiService();
+        apiService = new ApiService();
+        apiService.getConferences(this);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
         apiService.getConferences(this);
     }
 
@@ -98,5 +108,10 @@ public class MainActivity extends AppCompatActivity {
         auditoriums.add(fourthLevelB);
 
         return auditoriums;
+    }
+
+    @Override
+    public void onBackPressed() {
+        this.moveTaskToBack(true);
     }
 }

@@ -1,6 +1,7 @@
 package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Services;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.text.format.DateFormat;
@@ -23,7 +24,8 @@ import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceD
 
 public class ApiService {
 
-    private String API_URL = "http://dc32fb58.ngrok.io/api";
+    private String API_URL = "http://cneisi.sanfrancisco.utn.edu.ar/api";
+    private String API_TOKEN = "fe7f3a34c7c04f7da5c4eaceb75f0575";
 
     public boolean postAssistance(Assistance assistance) {
         try {
@@ -34,7 +36,7 @@ public class ApiService {
                 StrictMode.setThreadPolicy(policy);
             }
 
-            String urlPath = API_URL + "/assistance?api_token=123456";
+            String urlPath = API_URL + "/assistance?api_token=" + API_TOKEN;
             URL url = new URL(urlPath);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
@@ -57,6 +59,7 @@ public class ApiService {
 
             try {
                 if (urlConnection.getResponseCode() == 200) {
+                    Log.i("ASISTENCIA ENVIADA", "Se envio correctamente una asistencia");
                     return true;
                 }
             } finally {
@@ -86,7 +89,7 @@ public class ApiService {
         @Override
         protected String doInBackground(String... params) {
             try {
-                String urlPath = API_URL + "/conferences?api_token=123456";
+                String urlPath = API_URL + "/conferences?api_token=" + API_TOKEN;
                 URL url = new URL(urlPath);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -135,6 +138,25 @@ public class ApiService {
             if (conferenceDbHelper.getAllConferences().getCount() == 0) {
                 for (Conference conference: conferences) {
                     conferenceDbHelper.saveConference(conference);
+                }
+            } else {
+                Log.i("ACTUALIZANDO", "actualizando conferencias");
+
+                for (Conference conference: conferences) {
+                    Cursor conferenceCursor = conferenceDbHelper.getByIdCloud(conference.getExternalId());
+
+                    if(conferenceCursor.getCount() == 0) {
+                        conferenceDbHelper.saveConference(conference);
+                    } else {
+                        conferenceCursor.moveToFirst();
+                        Conference conferenceSearched = new Conference(conferenceCursor);
+                        conferenceSearched.setDate(conference.getDate());
+                        conferenceSearched.setAuditorium(conference.getAuditorium());
+
+                        conferenceDbHelper.updateConference(conferenceSearched);
+                    }
+
+                    conferenceCursor.close();
                 }
             }
         }

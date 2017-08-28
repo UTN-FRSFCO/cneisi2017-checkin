@@ -1,7 +1,9 @@
-package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017;
+package ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,7 @@ import java.util.Date;
 
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Models.Conference;
 import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.Persistence.ConferenceDbHelper;
+import ar.edu.utn.sanfrancisco.cneisi.checkin_cneisi2017.R;
 
 public class ConferencesActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     TextView tvAuditoriumName;
@@ -48,9 +51,9 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
         String auditoriumName = bundle.getString("auditorium");
         String auditoriumCode = bundle.getString("auditoriumCode");
 
-        this.setTitle(auditoriumName);
+        this.setTitle(auditoriumName.toUpperCase());
 
-        this.arraySpinner = new String[] {
+        this.arraySpinner = new String[]{
                 "Jueves", "Viernes"
         };
 
@@ -74,6 +77,10 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
         this.loadConferences(auditoriumCode);
     }
 
+    private Context getActivity() {
+        return this;
+    }
+
     private void loadConferences(String auditoriumCode) {
         final ArrayList<Conference> conferences = this.getConferences(auditoriumCode);
         ConferenceAdapter adapter = new ConferenceAdapter(ConferencesActivity.this, conferences);
@@ -82,17 +89,29 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
         lvConferences.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Conference conference = conferences.get(position);
-                Intent intent = new Intent(ConferencesActivity.this, ScannerActivity.class);
+                final Conference conference = conferences.get(position);
+                final Intent intent = new Intent(ConferencesActivity.this, ScannerActivity.class);
 
-                try
-                {
-                    intent.putExtra("ConferenceID", conference.getExternalId());
-                    intent.putExtra("ConferenceName", conference.getTitle());
+                try {
 
-                    startActivity(intent);
-                }catch (Exception e)
-                {
+                    new AlertDialog.Builder(getActivity())
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle(conference.getTitle())
+                            .setMessage("Quiere escanear credenciales de la charla " + conference.getTitle() + " en el horario " +
+                                    "" + conference.getHour() + " ?")
+                            .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    intent.putExtra("ConferenceID", conference.getExternalId());
+                                    intent.putExtra("ConferenceName", conference.getTitle());
+
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .show();
+
+                } catch (Exception e) {
                     Toast.makeText(ConferencesActivity.this, "Error", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -115,7 +134,7 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
             TextView tvDate = (TextView) convertView.findViewById(R.id.tvConferenceDate);
 
             tvName.setText(conference.getTitle());
-            tvDate.setText(conference.getDate());
+            tvDate.setText(conference.getHour());
 
             return convertView;
         }
@@ -166,13 +185,12 @@ public class ConferencesActivity extends AppCompatActivity implements AdapterVie
                 Date conferenceDate = simpleDateFormat.parse(conference.getDate());
                 String conferenceDayAsString = dateFormat.format(conferenceDate);
 
-                if(spinnerDays.getSelectedItemPosition() == 0 && conferenceDayAsString.equals(firstDayAsString) ||
+                if (spinnerDays.getSelectedItemPosition() == 0 && conferenceDayAsString.equals(firstDayAsString) ||
                         spinnerDays.getSelectedItemPosition() == 1 && conferenceDayAsString.equals(secondDayAsString)) {
                     conferences.add(conference);
                 }
             }
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.e("ERROR", e.getMessage());
         }
 
